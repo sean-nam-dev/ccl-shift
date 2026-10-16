@@ -1,6 +1,8 @@
 package com.cornucopiacruise.ccl.feature.auth.presentation.register
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.cornucopiacruise.ccl.feature.auth.domain.repository.AuthRepository
 import com.cornucopiacruise.ccl.feature.auth.domain.validation.validateEmail
 import com.cornucopiacruise.ccl.feature.auth.domain.validation.validateFullName
 import com.cornucopiacruise.ccl.feature.auth.domain.validation.validatePassword
@@ -8,8 +10,11 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 
-class RegisterViewModel : ViewModel() {
+class RegisterViewModel(
+    private val authRepository: AuthRepository
+) : ViewModel() {
     private val _state = MutableStateFlow(RegisterState())
     val state: StateFlow<RegisterState> = _state.asStateFlow()
 
@@ -24,19 +29,29 @@ class RegisterViewModel : ViewModel() {
             is RegisterEvent.TogglePasswordVisibility ->
                 _state.update { it.copy(isPasswordVisible = !it.isPasswordVisible) }
             is RegisterEvent.RegisterClick -> {
-                val result = validate()
+                if (hasErrors() || _state.value.isLoading) {
+                    return
+                } else {
+                    viewModelScope.launch {
+                        _state.update { it.copy(isLoading = true) }
 
+                        authRepository.register(
+                            _state.value.fullName,
+                            _state.value.email,
+                            _state.value.password
+                        )
 
+                        _state.update { it.copy(isLoading = false) }
+                    }
+                }
             }
             is RegisterEvent.LogInClick -> {
-                val result = validate()
-
 
             }
         }
     }
 
-    private fun validate(): Boolean {
+    private fun hasErrors(): Boolean {
         val trimmedFullName = state.value.fullName.trim()
         val trimmedEmail = state.value.email.trim()
 
@@ -54,7 +69,7 @@ class RegisterViewModel : ViewModel() {
             )
         }
 
-        return !(fullNameResult != null || emailResult != null || passwordResult != null)
+        return fullNameResult != null || emailResult != null || passwordResult != null
     }
 }
 

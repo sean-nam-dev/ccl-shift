@@ -1,14 +1,46 @@
 package com.cornucopiacruise.ccl.feature.auth.presentation.register
 
+import com.cornucopiacruise.ccl.feature.auth.domain.repository.AuthRepository
+import com.cornucopiacruise.ccl.feature.auth.domain.repository.FakeAuthRepository
+import com.cornucopiacruise.ccl.feature.auth.domain.repository.RegisterResult
 import com.cornucopiacruise.ccl.feature.auth.domain.validation.EmailError
 import com.cornucopiacruise.ccl.feature.auth.domain.validation.FullNameError
 import com.cornucopiacruise.ccl.feature.auth.domain.validation.PasswordError
+import kotlinx.coroutines.CompletableDeferred
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.test.UnconfinedTestDispatcher
+import kotlinx.coroutines.test.resetMain
+import kotlinx.coroutines.test.setMain
+import kotlin.test.AfterTest
+import kotlin.test.BeforeTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
 import kotlin.test.assertTrue
 
+@OptIn(ExperimentalCoroutinesApi::class)
 class RegisterViewModelTest {
+
+    @BeforeTest
+    fun setup() {
+        Dispatchers.setMain(UnconfinedTestDispatcher())
+    }
+
+    @AfterTest
+    fun tearDown() {
+        Dispatchers.resetMain()
+    }
+
+    private fun createViewModel(
+        repository: AuthRepository = FakeAuthRepository()
+    ) = RegisterViewModel(repository)
+
+    private fun RegisterViewModel.fillValidForm() {
+        onEvent(RegisterEvent.FullNameChange("John Doe"))
+        onEvent(RegisterEvent.EmailChange("test@example.com"))
+        onEvent(RegisterEvent.PasswordChange("password123!!!"))
+    }
 
     @Test
     fun `initial state has empty fields and hidden password`() {
@@ -108,5 +140,48 @@ class RegisterViewModelTest {
         assertEquals(password, viewModel.state.value.password)
     }
 
-    private fun createViewModel() = RegisterViewModel()
+    @Test
+    fun `RegisterClick with valid form calls repository`() {
+        val fakeAuthRepository = FakeAuthRepository()
+        val viewModel = createViewModel(fakeAuthRepository).apply { fillValidForm() }
+
+        viewModel.onEvent(RegisterEvent.RegisterClick)
+
+        assertEquals(
+            listOf(
+                FakeAuthRepository.Call(
+                    "John Doe",
+                    "test@example.com",
+                    "password123!!!"
+                )
+            ),
+            fakeAuthRepository.registerCallList
+        )
+    }
+
+    @Test
+    fun `loading is true while registration in progress and false after`() {
+        val fakeAuthRepository = FakeAuthRepository()
+        val gate = CompletableDeferred<Unit>()
+        fakeAuthRepository.registerGate = gate
+        val viewModel = createViewModel(fakeAuthRepository).apply { fillValidForm() }
+
+        viewModel.onEvent(RegisterEvent.RegisterClick)
+        assertTrue(viewModel.state.value.isLoading)
+
+        gate.complete(Unit)
+        assertFalse(viewModel.state.value.isLoading)
+    }
+
+    @Test
+    fun `double click on register button has no effect`() {
+        val fakeAuthRepository = FakeAuthRepository()
+        fakeAuthRepository.registerGate = CompletableDeferred()
+        val viewModel = createViewModel(fakeAuthRepository).apply { fillValidForm() }
+
+        viewModel.onEvent(RegisterEvent.RegisterClick)
+        viewModel.onEvent(RegisterEvent.RegisterClick)
+
+        assertEquals(1, fakeAuthRepository.registerCallList.size)
+    }
 }
