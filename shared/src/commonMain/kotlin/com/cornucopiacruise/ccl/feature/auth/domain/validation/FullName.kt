@@ -3,7 +3,7 @@ package com.cornucopiacruise.ccl.feature.auth.domain.validation
 import com.cornucopiacruise.ccl.core.domain.hasDigits
 import com.cornucopiacruise.ccl.core.domain.hasSpecialChars
 
-enum class FullNameError {
+enum class FullNameError : ValidationError {
     IS_BLANK,
     HAS_NUMBERS,
     HAS_SPECIAL_CHARACTERS,

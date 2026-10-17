@@ -1,6 +1,6 @@
 package com.cornucopiacruise.ccl.feature.auth.domain.validation
 
-enum class EmailError {
+enum class EmailError : ValidationError {
     IS_BLANK,
     INVALID_FORMAT
 }

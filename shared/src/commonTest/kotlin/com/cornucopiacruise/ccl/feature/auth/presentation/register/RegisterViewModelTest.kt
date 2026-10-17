@@ -1,5 +1,6 @@
 package com.cornucopiacruise.ccl.feature.auth.presentation.register
 
+import app.cash.turbine.test
 import com.cornucopiacruise.ccl.feature.auth.domain.repository.AuthRepository
 import com.cornucopiacruise.ccl.feature.auth.domain.repository.FakeAuthRepository
 import com.cornucopiacruise.ccl.feature.auth.domain.repository.RegisterResult
@@ -11,6 +12,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.resetMain
+import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.test.setMain
 import kotlin.test.AfterTest
 import kotlin.test.BeforeTest
@@ -183,5 +185,27 @@ class RegisterViewModelTest {
         viewModel.onEvent(RegisterEvent.RegisterClick)
 
         assertEquals(1, fakeAuthRepository.registerCallList.size)
+    }
+
+    @Test
+    fun `login click emits navigate to login effect`() = runTest {
+        val viewModel = createViewModel()
+
+        viewModel.effects.test {
+            viewModel.onEvent(RegisterEvent.LogInClick)
+
+            assertEquals(RegisterEffect.NavigateToLogin, awaitItem())
+        }
+    }
+
+    @Test
+    fun `successful registration emits navigate to home effect`() = runTest {
+        val viewModel = createViewModel().apply { fillValidForm() }
+
+        viewModel.effects.test {
+            viewModel.onEvent(RegisterEvent.RegisterClick)
+
+            assertEquals(RegisterEffect.NavigateToHome, awaitItem())
+        }
     }
 }
