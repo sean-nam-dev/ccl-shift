@@ -10,7 +10,7 @@ sealed class RegisterResult {
 }
 
 enum class RegisterError {
-    ALREADY_IN_USE,
+    EMAIL_ALREADY_IN_USE,
     NETWORK,
     UNKNOWN
 }

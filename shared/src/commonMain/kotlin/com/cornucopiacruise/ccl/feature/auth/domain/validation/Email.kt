@@ -1,8 +1,9 @@
 package com.cornucopiacruise.ccl.feature.auth.domain.validation
 
-enum class EmailError : ValidationError {
+enum class EmailError {
     IS_BLANK,
-    INVALID_FORMAT
+    INVALID_FORMAT,
+    ALREADY_IN_USE
 }
 
 private val EMAIL = Regex("""[a-zA-Z0-9._%+-]+@[a-zA-Z0-9-]+(\.[a-zA-Z0-9-]+)*\.[a-zA-Z]{2,}""")

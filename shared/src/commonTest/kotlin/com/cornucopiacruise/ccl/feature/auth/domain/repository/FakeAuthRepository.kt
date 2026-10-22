@@ -10,7 +10,7 @@ class FakeAuthRepository : AuthRepository {
         val password: String
     )
 
-    var registerResult = RegisterResult.Success
+    var registerResult: RegisterResult = RegisterResult.Success
     var registerCallList = mutableListOf<Call>()
     var registerGate: CompletableDeferred<Unit>? = null
 

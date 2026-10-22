@@ -3,7 +3,9 @@ package com.cornucopiacruise.ccl.feature.auth.presentation.register
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.cornucopiacruise.ccl.feature.auth.domain.repository.AuthRepository
+import com.cornucopiacruise.ccl.feature.auth.domain.repository.RegisterError
 import com.cornucopiacruise.ccl.feature.auth.domain.repository.RegisterResult
+import com.cornucopiacruise.ccl.feature.auth.domain.validation.EmailError
 import com.cornucopiacruise.ccl.feature.auth.presentation.register.util.hasErrors
 import com.cornucopiacruise.ccl.feature.auth.presentation.register.util.validated
 import kotlinx.coroutines.channels.Channel
@@ -35,9 +37,8 @@ class RegisterViewModel(
                 _state.update { it.copy(isPasswordVisible = !it.isPasswordVisible) }
             is RegisterEvent.RegisterClick ->
                 register()
-            is RegisterEvent.LogInClick -> {
+            is RegisterEvent.LogInClick ->
                 _effects.trySend(RegisterEffect.NavigateToLogin)
-            }
         }
     }
 
@@ -59,11 +60,15 @@ class RegisterViewModel(
 
             when (result) {
                 is RegisterResult.Success -> _effects.trySend(RegisterEffect.NavigateToHome)
-                is RegisterResult.Failure -> _effects.trySend(RegisterEffect.ShowRegisterError(result.reason))
+                is RegisterResult.Failure -> handleFailure(result.reason)
             }
         }
     }
+
+    private fun handleFailure(failure: RegisterError) {
+        if (failure == RegisterError.EMAIL_ALREADY_IN_USE) {
+            _state.update { it.copy(emailError = EmailError.ALREADY_IN_USE) }
+        }
+        _effects.trySend(RegisterEffect.ShowRegisterError(failure))
+    }
 }
-
-
-

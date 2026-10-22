@@ -4,7 +4,7 @@ import com.cornucopiacruise.ccl.core.domain.hasDigits
 import com.cornucopiacruise.ccl.core.domain.hasLetters
 import com.cornucopiacruise.ccl.core.domain.hasSpecialChars
 
-enum class PasswordError : ValidationError {
+enum class PasswordError {
     IS_BLANK,
     NO_DIGITS,
     NO_SPECIALS,
