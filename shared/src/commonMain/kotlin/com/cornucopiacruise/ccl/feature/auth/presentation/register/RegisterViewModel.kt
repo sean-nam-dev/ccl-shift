@@ -6,8 +6,6 @@ import com.cornucopiacruise.ccl.feature.auth.domain.repository.AuthRepository
 import com.cornucopiacruise.ccl.feature.auth.domain.repository.RegisterError
 import com.cornucopiacruise.ccl.feature.auth.domain.repository.RegisterResult
 import com.cornucopiacruise.ccl.feature.auth.domain.validation.EmailError
-import com.cornucopiacruise.ccl.feature.auth.presentation.register.util.hasErrors
-import com.cornucopiacruise.ccl.feature.auth.presentation.register.util.validated
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -29,8 +27,12 @@ class RegisterViewModel(
         when (event) {
             is RegisterEvent.FullNameChange ->
                 _state.update { it.copy(fullName = event.newName, fullNameError = null) }
+            is RegisterEvent.ClearFullName ->
+                _state.update { it.copy(fullName = "", fullNameError = null) }
             is RegisterEvent.EmailChange ->
                 _state.update { it.copy(email = event.newEmail, emailError = null) }
+            is RegisterEvent.ClearEmail ->
+                _state.update { it.copy(email = "", emailError = null) }
             is RegisterEvent.PasswordChange ->
                 _state.update { it.copy(password = event.newPassword, passwordError = null) }
             is RegisterEvent.TogglePasswordVisibility ->

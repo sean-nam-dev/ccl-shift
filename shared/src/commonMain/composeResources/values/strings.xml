@@ -1,0 +1,15 @@
+<resources>
+    <string name="app_name">CCL Shift</string>
+    <string name="test">Test</string>
+    <string name="label_text">Label Text</string>
+    <string name="placeholder_text">Placeholder Text</string>
+    <string name="full_name">Full name</string>
+    <string name="email">Email</string>
+    <string name="password">Password</string>
+    <string name="register">Register</string>
+    <string name="log_in">Log In</string>
+    <string name="or">Or</string>
+    <string name="email_already_in_use">Email already in use</string>
+    <string name="network_error">Network error</string>
+    <string name="unknown_error">Unknown error</string>
+</resources>
