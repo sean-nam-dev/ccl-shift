@@ -1,6 +1,5 @@
 package com.cornucopiacruise.ccl.feature.auth.presentation.register
 
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -9,8 +8,6 @@ import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
@@ -38,7 +35,6 @@ import cclshift.shared.generated.resources.password
 import cclshift.shared.generated.resources.register
 import com.cornucopiacruise.ccl.core.presentation.theme.PreviewScaffold
 import com.cornucopiacruise.ccl.core.presentation.theme.dimens
-import com.cornucopiacruise.ccl.feature.auth.presentation.components.AppOutlinedTextField
 import com.cornucopiacruise.ccl.feature.auth.presentation.components.AppFilledButton
 import com.cornucopiacruise.ccl.feature.auth.presentation.components.AppOutlinedButton
 import com.cornucopiacruise.ccl.feature.auth.presentation.components.TextedDivider

@@ -15,7 +15,6 @@ import cclshift.shared.generated.resources.ic_outlined_email_24
 import cclshift.shared.generated.resources.ic_outlined_visibility_24
 import com.cornucopiacruise.ccl.core.presentation.theme.PreviewScaffold
 import org.jetbrains.compose.resources.painterResource
-import kotlin.let
 
 data class TrailingIcon(
     val painter: Painter,
