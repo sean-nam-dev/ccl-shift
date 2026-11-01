@@ -1,4 +1,4 @@
-package com.cornucopiacruise.ccl.core.presentation.theme
+package com.cornucopiacruise.ccl.feature.util
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column

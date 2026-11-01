@@ -1,8 +1,10 @@
 package com.cornucopiacruise.ccl.feature.auth.domain.repository
 
+import com.cornucopiacruise.ccl.feature.auth.domain.repository.register.RegisterRepository
+import com.cornucopiacruise.ccl.feature.auth.domain.repository.register.RegisterResult
 import kotlinx.coroutines.CompletableDeferred
 
-class FakeAuthRepository : AuthRepository {
+class FakeRegisterRepository : RegisterRepository {
 
     data class Call(
         val fullName: String,

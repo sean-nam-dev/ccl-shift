@@ -1,13 +1,13 @@
 package com.cornucopiacruise.ccl.feature.auth.presentation.register
 
 import app.cash.turbine.test
-import com.cornucopiacruise.ccl.feature.auth.domain.repository.AuthRepository
-import com.cornucopiacruise.ccl.feature.auth.domain.repository.FakeAuthRepository
-import com.cornucopiacruise.ccl.feature.auth.domain.repository.RegisterError
-import com.cornucopiacruise.ccl.feature.auth.domain.repository.RegisterResult
-import com.cornucopiacruise.ccl.feature.auth.domain.validation.EmailError
-import com.cornucopiacruise.ccl.feature.auth.domain.validation.FullNameError
-import com.cornucopiacruise.ccl.feature.auth.domain.validation.PasswordError
+import com.cornucopiacruise.ccl.feature.auth.domain.repository.register.RegisterRepository
+import com.cornucopiacruise.ccl.feature.auth.domain.repository.FakeRegisterRepository
+import com.cornucopiacruise.ccl.feature.auth.domain.repository.register.RegisterError
+import com.cornucopiacruise.ccl.feature.auth.domain.repository.register.RegisterResult
+import com.cornucopiacruise.ccl.feature.auth.domain.validator.EmailError
+import com.cornucopiacruise.ccl.feature.auth.domain.validator.FullNameError
+import com.cornucopiacruise.ccl.feature.auth.domain.validator.PasswordError
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -37,7 +37,7 @@ class RegisterViewModelTest {
     }
 
     private fun createViewModel(
-        repository: AuthRepository = FakeAuthRepository()
+        repository: RegisterRepository = FakeRegisterRepository()
     ) = RegisterViewModel(repository)
 
     private fun RegisterViewModel.fillValidForm(
@@ -153,14 +153,14 @@ class RegisterViewModelTest {
 
     @Test
     fun `RegisterClick with valid form calls repository`() {
-        val repository = FakeAuthRepository()
+        val repository = FakeRegisterRepository()
         val viewModel = createViewModel(repository).apply { fillValidForm() }
 
         viewModel.onEvent(RegisterEvent.RegisterClick)
 
         assertEquals(
             listOf(
-                FakeAuthRepository.Call(
+                FakeRegisterRepository.Call(
                     "John Doe",
                     "test@example.com",
                     "password123!!!"
@@ -172,7 +172,7 @@ class RegisterViewModelTest {
 
     @Test
     fun `loading is true while registration in progress and false after`() {
-        val repository = FakeAuthRepository()
+        val repository = FakeRegisterRepository()
         val gate = CompletableDeferred<Unit>()
         repository.registerGate = gate
         val viewModel = createViewModel(repository).apply { fillValidForm() }
@@ -186,7 +186,7 @@ class RegisterViewModelTest {
 
     @Test
     fun `double click on register button has no effect`() {
-        val repository = FakeAuthRepository()
+        val repository = FakeRegisterRepository()
         repository.registerGate = CompletableDeferred()
         val viewModel = createViewModel(repository).apply { fillValidForm() }
 
@@ -220,7 +220,7 @@ class RegisterViewModelTest {
 
     @Test
     fun `email already in use failure sets email error and stops loading and triggers show error effect`() = runTest {
-        val repository = FakeAuthRepository().apply {
+        val repository = FakeRegisterRepository().apply {
             registerResult = RegisterResult.Failure(RegisterError.EMAIL_ALREADY_IN_USE)
         }
         val viewModel = createViewModel(repository).apply {
@@ -239,7 +239,7 @@ class RegisterViewModelTest {
 
     @Test
     fun `network failure sets show error effect and stops loading`() = runTest {
-        val repository = FakeAuthRepository().apply {
+        val repository = FakeRegisterRepository().apply {
             registerResult = RegisterResult.Failure(RegisterError.NETWORK)
         }
         val viewModel = createViewModel(repository).apply {
@@ -257,7 +257,7 @@ class RegisterViewModelTest {
 
     @Test
     fun `unknown failure sets show error effect and stops loading`() = runTest {
-        val repository = FakeAuthRepository().apply {
+        val repository = FakeRegisterRepository().apply {
             registerResult = RegisterResult.Failure(RegisterError.UNKNOWN)
         }
         val viewModel = createViewModel(repository).apply {

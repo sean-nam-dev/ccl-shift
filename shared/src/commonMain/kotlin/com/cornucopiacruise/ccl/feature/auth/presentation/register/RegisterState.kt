@@ -1,11 +1,11 @@
 package com.cornucopiacruise.ccl.feature.auth.presentation.register
 
-import com.cornucopiacruise.ccl.feature.auth.domain.validation.EmailError
-import com.cornucopiacruise.ccl.feature.auth.domain.validation.FullNameError
-import com.cornucopiacruise.ccl.feature.auth.domain.validation.PasswordError
-import com.cornucopiacruise.ccl.feature.auth.domain.validation.validateEmail
-import com.cornucopiacruise.ccl.feature.auth.domain.validation.validateFullName
-import com.cornucopiacruise.ccl.feature.auth.domain.validation.validatePassword
+import com.cornucopiacruise.ccl.feature.auth.domain.validator.EmailError
+import com.cornucopiacruise.ccl.feature.auth.domain.validator.FullNameError
+import com.cornucopiacruise.ccl.feature.auth.domain.validator.PasswordError
+import com.cornucopiacruise.ccl.feature.auth.domain.validator.validateEmail
+import com.cornucopiacruise.ccl.feature.auth.domain.validator.validateFullName
+import com.cornucopiacruise.ccl.feature.auth.domain.validator.validatePassword
 
 data class RegisterState(
     val fullName: String = "",

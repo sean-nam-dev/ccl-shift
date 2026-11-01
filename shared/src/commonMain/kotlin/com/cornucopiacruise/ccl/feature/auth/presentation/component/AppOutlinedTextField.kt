@@ -1,4 +1,4 @@
-package com.cornucopiacruise.ccl.feature.auth.presentation.components
+package com.cornucopiacruise.ccl.feature.auth.presentation.component
 
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Icon
@@ -13,7 +13,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import cclshift.shared.generated.resources.Res
 import cclshift.shared.generated.resources.ic_outlined_email_24
 import cclshift.shared.generated.resources.ic_outlined_visibility_24
-import com.cornucopiacruise.ccl.core.presentation.theme.PreviewScaffold
+import com.cornucopiacruise.ccl.feature.util.PreviewScaffold
 import org.jetbrains.compose.resources.painterResource
 
 data class TrailingIcon(

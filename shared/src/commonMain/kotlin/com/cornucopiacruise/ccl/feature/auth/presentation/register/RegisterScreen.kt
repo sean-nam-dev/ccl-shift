@@ -7,9 +7,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.cornucopiacruise.ccl.core.presentation.theme.PreviewScaffold
-import com.cornucopiacruise.ccl.feature.auth.domain.repository.StubAuthRepository
-import com.cornucopiacruise.ccl.feature.auth.domain.repository.messageRes
+import com.cornucopiacruise.ccl.core.presentation.theme.CCLShiftTheme
+import com.cornucopiacruise.ccl.feature.auth.data.register.StubRegisterRepository
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.getString
 
@@ -45,13 +44,13 @@ fun RegisterScreen(
     )
 }
 
-@Suppress("ViewModelConstructorInComposable")
 @Preview
 @Composable
+@Suppress("ViewModelConstructorInComposable")
 private fun RegisterScreenPreview() {
-    PreviewScaffold {
+    CCLShiftTheme {
         RegisterScreen(
-            viewModel = RegisterViewModel(StubAuthRepository()),
+            viewModel = RegisterViewModel(StubRegisterRepository()),
             onNavigateToLogin = {},
             onNavigateToHome = {}
         )

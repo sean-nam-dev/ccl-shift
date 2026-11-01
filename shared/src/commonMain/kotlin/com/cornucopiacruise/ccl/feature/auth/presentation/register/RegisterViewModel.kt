@@ -2,10 +2,10 @@ package com.cornucopiacruise.ccl.feature.auth.presentation.register
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.cornucopiacruise.ccl.feature.auth.domain.repository.AuthRepository
-import com.cornucopiacruise.ccl.feature.auth.domain.repository.RegisterError
-import com.cornucopiacruise.ccl.feature.auth.domain.repository.RegisterResult
-import com.cornucopiacruise.ccl.feature.auth.domain.validation.EmailError
+import com.cornucopiacruise.ccl.feature.auth.domain.repository.register.RegisterRepository
+import com.cornucopiacruise.ccl.feature.auth.domain.repository.register.RegisterError
+import com.cornucopiacruise.ccl.feature.auth.domain.repository.register.RegisterResult
+import com.cornucopiacruise.ccl.feature.auth.domain.validator.EmailError
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -15,7 +15,7 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 class RegisterViewModel(
-    private val authRepository: AuthRepository
+    private val registerRepository: RegisterRepository
 ) : ViewModel() {
     private val _state = MutableStateFlow(RegisterState())
     val state: StateFlow<RegisterState> = _state.asStateFlow()
@@ -52,7 +52,7 @@ class RegisterViewModel(
 
         _state.update { it.copy(isLoading = true) }
         viewModelScope.launch {
-            val result = authRepository.register(
+            val result = registerRepository.register(
                 fullName = _state.value.fullName,
                 email = _state.value.email,
                 password = _state.value.password

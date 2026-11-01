@@ -1,4 +1,4 @@
-package com.cornucopiacruise.ccl.feature.auth.presentation.components
+package com.cornucopiacruise.ccl.feature.auth.presentation.component
 
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.material3.ButtonDefaults
@@ -10,7 +10,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import cclshift.shared.generated.resources.Res
 import cclshift.shared.generated.resources.register
-import com.cornucopiacruise.ccl.core.presentation.theme.PreviewScaffold
+import com.cornucopiacruise.ccl.feature.util.PreviewScaffold
 import org.jetbrains.compose.resources.stringResource
 
 @Composable

@@ -1,6 +1,6 @@
 package com.cornucopiacruise.ccl.feature.auth.presentation.register
 
-import com.cornucopiacruise.ccl.feature.auth.domain.repository.RegisterError
+import com.cornucopiacruise.ccl.feature.auth.domain.repository.register.RegisterError
 
 sealed interface RegisterEffect {
     data object NavigateToLogin : RegisterEffect

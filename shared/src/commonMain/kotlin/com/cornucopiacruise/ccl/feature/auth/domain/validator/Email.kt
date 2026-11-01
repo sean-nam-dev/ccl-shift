@@ -1,4 +1,4 @@
-package com.cornucopiacruise.ccl.feature.auth.domain.validation
+package com.cornucopiacruise.ccl.feature.auth.domain.validator
 
 enum class EmailError {
     IS_BLANK,

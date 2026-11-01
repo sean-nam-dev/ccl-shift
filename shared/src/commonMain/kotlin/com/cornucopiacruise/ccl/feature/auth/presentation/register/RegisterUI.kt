@@ -33,12 +33,14 @@ import cclshift.shared.generated.resources.log_in
 import cclshift.shared.generated.resources.or
 import cclshift.shared.generated.resources.password
 import cclshift.shared.generated.resources.register
-import com.cornucopiacruise.ccl.core.presentation.theme.PreviewScaffold
+import com.cornucopiacruise.ccl.core.presentation.theme.CCLShiftTheme
+import com.cornucopiacruise.ccl.feature.util.PreviewScaffold
 import com.cornucopiacruise.ccl.core.presentation.theme.dimens
-import com.cornucopiacruise.ccl.feature.auth.presentation.components.AppFilledButton
-import com.cornucopiacruise.ccl.feature.auth.presentation.components.AppOutlinedButton
-import com.cornucopiacruise.ccl.feature.auth.presentation.components.TextedDivider
-import com.cornucopiacruise.ccl.feature.auth.presentation.components.TrailingIcon
+import com.cornucopiacruise.ccl.feature.auth.presentation.component.AppFilledButton
+import com.cornucopiacruise.ccl.feature.auth.presentation.component.AppOutlinedButton
+import com.cornucopiacruise.ccl.feature.auth.presentation.component.AppOutlinedTextField
+import com.cornucopiacruise.ccl.feature.auth.presentation.component.TextedDivider
+import com.cornucopiacruise.ccl.feature.auth.presentation.component.TrailingIcon
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 
@@ -150,7 +152,7 @@ fun RegisterUI(
 @Composable
 @Preview
 private fun RegisterUIPreview() {
-    PreviewScaffold {
+    CCLShiftTheme {
         RegisterUI(
             state = RegisterState(),
             snackBarHostState = SnackbarHostState(),
