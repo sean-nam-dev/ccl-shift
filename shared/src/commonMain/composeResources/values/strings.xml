@@ -12,4 +12,5 @@
     <string name="email_already_in_use">Email already in use</string>
     <string name="network_error">Network error</string>
     <string name="unknown_error">Unknown error</string>
+    <string name="invalid_credentials">Invalid credentials</string>"
 </resources>
