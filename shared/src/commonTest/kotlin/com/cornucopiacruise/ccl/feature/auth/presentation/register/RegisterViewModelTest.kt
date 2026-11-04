@@ -66,33 +66,58 @@ class RegisterViewModelTest {
     }
 
     @Test
-    fun `FullNameChange event updates state`() {
+    fun `FullNameChange event updates state and resets error to null`() {
         val viewModel = createViewModel()
         val newName = "John Doe"
 
         viewModel.onEvent(RegisterEvent.FullNameChange(newName))
 
         assertEquals(newName, viewModel.state.value.fullName)
+        assertNull(viewModel.state.value.fullNameError)
     }
 
     @Test
-    fun `EmailChange event updates state`() {
+    fun `ClearFullName clears FullName field`() {
+        val viewModel = createViewModel()
+        val newName = "John Doe"
+
+        viewModel.onEvent(RegisterEvent.FullNameChange(newName))
+        viewModel.onEvent(RegisterEvent.ClearFullName)
+
+        assertEquals("", viewModel.state.value.fullName)
+    }
+
+    @Test
+    fun `EmailChange event updates state state and resets error to null`() {
         val viewModel = createViewModel()
         val newEmail = "test@example.com"
 
         viewModel.onEvent(RegisterEvent.EmailChange(newEmail))
 
         assertEquals(newEmail, viewModel.state.value.email)
+        assertNull(viewModel.state.value.emailError)
     }
 
     @Test
-    fun `PasswordChange event updates state`() {
+    fun `ClearEmail clears Email field`() {
+        val viewModel = createViewModel()
+        val newEmail = "test@example.com"
+
+        viewModel.onEvent(RegisterEvent.EmailChange(newEmail))
+        viewModel.onEvent(RegisterEvent.ClearEmail)
+
+        assertEquals("", viewModel.state.value.email)
+    }
+
+    @Test
+    fun `PasswordChange event updates state state and resets error to null`() {
         val viewModel = createViewModel()
         val newPassword = "password123"
 
         viewModel.onEvent(RegisterEvent.PasswordChange(newPassword))
 
         assertEquals(newPassword, viewModel.state.value.password)
+        assertNull(viewModel.state.value.passwordError)
     }
 
     @Test
@@ -100,11 +125,9 @@ class RegisterViewModelTest {
         val viewModel = createViewModel()
 
         viewModel.onEvent(RegisterEvent.TogglePasswordVisibility)
-
         assertTrue(viewModel.state.value.isPasswordVisible)
 
         viewModel.onEvent(RegisterEvent.TogglePasswordVisibility)
-
         assertFalse(viewModel.state.value.isPasswordVisible)
     }
 
@@ -123,12 +146,7 @@ class RegisterViewModelTest {
 
     @Test
     fun `RegisterClick event leaves no errors on valid form`() {
-        val viewModel = createViewModel()
-
-        viewModel.onEvent(RegisterEvent.FullNameChange("John Doe"))
-        viewModel.onEvent(RegisterEvent.EmailChange("test@example.com"))
-        viewModel.onEvent(RegisterEvent.PasswordChange("password123!!!"))
-
+        val viewModel = createViewModel().apply { fillValidForm() }
         viewModel.onEvent(RegisterEvent.RegisterClick)
     }
 
@@ -242,9 +260,7 @@ class RegisterViewModelTest {
         val repository = FakeRegisterRepository().apply {
             registerResult = RegisterResult.Failure(RegisterError.NETWORK)
         }
-        val viewModel = createViewModel(repository).apply {
-            fillValidForm()
-        }
+        val viewModel = createViewModel(repository).apply { fillValidForm() }
 
         viewModel.onEvent(RegisterEvent.RegisterClick)
 
@@ -260,9 +276,7 @@ class RegisterViewModelTest {
         val repository = FakeRegisterRepository().apply {
             registerResult = RegisterResult.Failure(RegisterError.UNKNOWN)
         }
-        val viewModel = createViewModel(repository).apply {
-            fillValidForm()
-        }
+        val viewModel = createViewModel(repository).apply { fillValidForm() }
 
         viewModel.onEvent(RegisterEvent.RegisterClick)
 

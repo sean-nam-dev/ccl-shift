@@ -13,8 +13,11 @@ val LoginState.hasErrors: Boolean
     get() = isEmailError || isPasswordError
 
 fun LoginState.validated(): LoginState {
+    val trimmedEmail = email.trim()
+
     return copy(
-        isEmailError = email.isBlank(),
+        email = trimmedEmail,
+        isEmailError = trimmedEmail.isBlank(),
         isPasswordError = password.isBlank()
     )
 }

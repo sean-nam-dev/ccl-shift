@@ -29,8 +29,6 @@ class LoginViewModel(
                 _state.value = _state.value.copy(email = "")
             is LoginEvent.PasswordChange ->
                 _state.update { it.copy(password = event.newPassword) }
-            is LoginEvent.ClearPassword ->
-                _state.update { it.copy(password = "") }
             is LoginEvent.TogglePasswordVisibility ->
                 _state.update { it.copy(isPasswordVisible = !it.isPasswordVisible) }
             is LoginEvent.LogInClick ->
