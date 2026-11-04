@@ -20,11 +20,7 @@ import com.cornucopiacruise.ccl.feature.main.navigation.MainGraph
 import com.cornucopiacruise.ccl.feature.main.navigation.MainRoute
 
 @Composable
-fun NavGraph(
-    startDestination: Any,
-    registerViewModel: RegisterViewModel,
-    loginViewModel: LoginViewModel
-) {
+fun NavGraph(startDestination: Any) {
     val navController = rememberNavController()
     val navigationManager = NavigationManager(navController)
 
@@ -37,7 +33,6 @@ fun NavGraph(
         ) {
             composable<AuthRoute.Register> {
                 RegisterScreen(
-                    viewModel = registerViewModel,
                     onNavigateToLogin = navigationManager.onNavigateToLogin(),
                     onNavigateToHome = navigationManager.onNavigateToHome()
                 )
@@ -45,7 +40,6 @@ fun NavGraph(
 
             composable<AuthRoute.Login> {
                 LoginScreen(
-                    viewModel = loginViewModel,
                     onNavigateToRegister = navigationManager.onNavigateToRegister(),
                     onNavigateToHome = navigationManager.onNavigateToHome()
                 )

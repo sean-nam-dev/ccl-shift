@@ -11,10 +11,11 @@ import com.cornucopiacruise.ccl.core.presentation.theme.CCLShiftTheme
 import com.cornucopiacruise.ccl.feature.auth.data.login.StubLoginRepository
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.getString
+import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
 fun LoginScreen(
-    viewModel: LoginViewModel,
+    viewModel: LoginViewModel = koinViewModel(),
     onNavigateToRegister: () -> Unit,
     onNavigateToHome: () -> Unit
 ) {
