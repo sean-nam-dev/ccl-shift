@@ -1,10 +1,10 @@
 package com.cornucopiacruise.ccl.feature.auth.presentation.register
 
 import app.cash.turbine.test
-import com.cornucopiacruise.ccl.feature.auth.domain.repository.register.RegisterRepository
-import com.cornucopiacruise.ccl.feature.auth.domain.repository.FakeRegisterRepository
-import com.cornucopiacruise.ccl.feature.auth.domain.repository.register.RegisterError
-import com.cornucopiacruise.ccl.feature.auth.domain.repository.register.RegisterResult
+import com.cornucopiacruise.ccl.feature.auth.domain.repository.AuthError
+import com.cornucopiacruise.ccl.feature.auth.domain.repository.AuthRepository
+import com.cornucopiacruise.ccl.feature.auth.domain.repository.AuthResult
+import com.cornucopiacruise.ccl.feature.auth.domain.repository.FakeAuthRepository
 import com.cornucopiacruise.ccl.feature.auth.domain.validator.EmailError
 import com.cornucopiacruise.ccl.feature.auth.domain.validator.FullNameError
 import com.cornucopiacruise.ccl.feature.auth.domain.validator.PasswordError
@@ -37,7 +37,7 @@ class RegisterViewModelTest {
     }
 
     private fun createViewModel(
-        repository: RegisterRepository = FakeRegisterRepository()
+        repository: AuthRepository = FakeAuthRepository()
     ) = RegisterViewModel(repository)
 
     private fun RegisterViewModel.fillValidForm(
@@ -171,26 +171,26 @@ class RegisterViewModelTest {
 
     @Test
     fun `RegisterClick with valid form calls repository`() {
-        val repository = FakeRegisterRepository()
+        val repository = FakeAuthRepository()
         val viewModel = createViewModel(repository).apply { fillValidForm() }
 
         viewModel.onEvent(RegisterEvent.RegisterClick)
 
         assertEquals(
             listOf(
-                FakeRegisterRepository.Call(
+                FakeAuthRepository.RegisterCall(
                     "John Doe",
                     "test@example.com",
                     "password123!!!"
                 )
             ),
-            repository.registerCallList
+            repository.registerCalls
         )
     }
 
     @Test
     fun `loading is true while registration in progress and false after`() {
-        val repository = FakeRegisterRepository()
+        val repository = FakeAuthRepository()
         val gate = CompletableDeferred<Unit>()
         repository.registerGate = gate
         val viewModel = createViewModel(repository).apply { fillValidForm() }
@@ -204,14 +204,14 @@ class RegisterViewModelTest {
 
     @Test
     fun `double click on register button has no effect`() {
-        val repository = FakeRegisterRepository()
+        val repository = FakeAuthRepository()
         repository.registerGate = CompletableDeferred()
         val viewModel = createViewModel(repository).apply { fillValidForm() }
 
         viewModel.onEvent(RegisterEvent.RegisterClick)
         viewModel.onEvent(RegisterEvent.RegisterClick)
 
-        assertEquals(1, repository.registerCallList.size)
+        assertEquals(1, repository.registerCalls.size)
     }
 
     @Test
@@ -238,8 +238,8 @@ class RegisterViewModelTest {
 
     @Test
     fun `email already in use failure sets email error and stops loading and triggers show error effect`() = runTest {
-        val repository = FakeRegisterRepository().apply {
-            registerResult = RegisterResult.Failure(RegisterError.EMAIL_ALREADY_IN_USE)
+        val repository = FakeAuthRepository().apply {
+            registerResult = AuthResult.Failure(AuthError.EMAIL_ALREADY_IN_USE)
         }
         val viewModel = createViewModel(repository).apply {
             fillValidForm(newEmail = "test@example.com")
@@ -251,14 +251,14 @@ class RegisterViewModelTest {
         assertFalse(viewModel.state.value.isLoading)
 
         viewModel.effects.test {
-            assertEquals(RegisterEffect.ShowRegisterError(RegisterError.EMAIL_ALREADY_IN_USE), awaitItem())
+            assertEquals(RegisterEffect.ShowAuthError(AuthError.EMAIL_ALREADY_IN_USE), awaitItem())
         }
     }
 
     @Test
     fun `network failure sets show error effect and stops loading`() = runTest {
-        val repository = FakeRegisterRepository().apply {
-            registerResult = RegisterResult.Failure(RegisterError.NETWORK)
+        val repository = FakeAuthRepository().apply {
+            registerResult = AuthResult.Failure(AuthError.NETWORK)
         }
         val viewModel = createViewModel(repository).apply { fillValidForm() }
 
@@ -267,14 +267,14 @@ class RegisterViewModelTest {
         assertFalse(viewModel.state.value.isLoading)
 
         viewModel.effects.test {
-            assertEquals(RegisterEffect.ShowRegisterError(RegisterError.NETWORK), awaitItem())
+            assertEquals(RegisterEffect.ShowAuthError(AuthError.NETWORK), awaitItem())
         }
     }
 
     @Test
     fun `unknown failure sets show error effect and stops loading`() = runTest {
-        val repository = FakeRegisterRepository().apply {
-            registerResult = RegisterResult.Failure(RegisterError.UNKNOWN)
+        val repository = FakeAuthRepository().apply {
+            registerResult = AuthResult.Failure(AuthError.UNKNOWN)
         }
         val viewModel = createViewModel(repository).apply { fillValidForm() }
 
@@ -283,7 +283,7 @@ class RegisterViewModelTest {
         assertFalse(viewModel.state.value.isLoading)
 
         viewModel.effects.test {
-            assertEquals(RegisterEffect.ShowRegisterError(RegisterError.UNKNOWN), awaitItem())
+            assertEquals(RegisterEffect.ShowAuthError(AuthError.UNKNOWN), awaitItem())
         }
     }
 }

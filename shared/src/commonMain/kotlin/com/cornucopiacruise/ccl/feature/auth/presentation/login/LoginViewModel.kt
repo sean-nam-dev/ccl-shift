@@ -2,8 +2,8 @@ package com.cornucopiacruise.ccl.feature.auth.presentation.login
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.cornucopiacruise.ccl.feature.auth.domain.repository.login.LoginRepository
-import com.cornucopiacruise.ccl.feature.auth.domain.repository.login.LoginResult
+import com.cornucopiacruise.ccl.feature.auth.domain.repository.AuthRepository
+import com.cornucopiacruise.ccl.feature.auth.domain.repository.AuthResult
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -13,7 +13,7 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 class LoginViewModel(
-    private val loginRepository: LoginRepository
+    private val authRepository: AuthRepository
 ) : ViewModel() {
     private val _state = MutableStateFlow(LoginState())
     val state: StateFlow<LoginState> = _state.asStateFlow()
@@ -45,7 +45,7 @@ class LoginViewModel(
 
         _state.update { it.copy(isLoading = true) }
         viewModelScope.launch {
-            val result = loginRepository.login(
+            val result = authRepository.login(
                 email = _state.value.email,
                 password = _state.value.password
             )
@@ -53,8 +53,8 @@ class LoginViewModel(
             _state.update { it.copy(isLoading = false) }
 
             when (result) {
-                is LoginResult.Success -> _effects.trySend(LoginEffect.NavigateToHome)
-                is LoginResult.Failure -> _effects.trySend(LoginEffect.ShowLoginError(result.reason))
+                is AuthResult.Success -> _effects.trySend(LoginEffect.NavigateToHome)
+                is AuthResult.Failure -> _effects.trySend(LoginEffect.ShowAuthError(result.reason))
             }
         }
     }

@@ -5,10 +5,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.cornucopiacruise.ccl.core.presentation.theme.CCLShiftTheme
-import com.cornucopiacruise.ccl.feature.auth.data.login.StubLoginRepository
+import com.cornucopiacruise.ccl.feature.auth.presentation.component.messageRes
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.getString
 import org.koin.compose.viewmodel.koinViewModel
@@ -28,7 +26,7 @@ fun LoginScreen(
             when (effect) {
                 is LoginEffect.NavigateToHome -> onNavigateToHome()
                 is LoginEffect.NavigateToRegister -> onNavigateToRegister()
-                is LoginEffect.ShowLoginError -> {
+                is LoginEffect.ShowAuthError -> {
                     scope.launch {
                         val message = getString(effect.error.messageRes())
                         snackBarHostState.showSnackbar(message)
@@ -43,17 +41,4 @@ fun LoginScreen(
         snackBarHostState = snackBarHostState,
         onEvent = viewModel::onEvent
     )
-}
-
-@Preview
-@Composable
-@Suppress("ViewModelConstructorInComposable")
-private fun LoginScreenPreview() {
-    CCLShiftTheme {
-        LoginScreen(
-            viewModel = LoginViewModel(StubLoginRepository()),
-            onNavigateToRegister = {},
-            onNavigateToHome = {},
-        )
-    }
 }

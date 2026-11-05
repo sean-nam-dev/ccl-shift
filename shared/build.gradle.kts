@@ -16,6 +16,7 @@ kotlin {
         iosTarget.binaries.framework {
             baseName = "Shared"
             isStatic = true
+            binaryOption("bundleId", "com.cornucopiacruise.ccl.shared")
         }
     }
     
@@ -60,6 +61,8 @@ kotlin {
             implementation(libs.koin.core)
             implementation(libs.koin.compose)
             implementation(libs.koin.compose.viewmodel)
+            implementation(libs.gitlive.firebase.auth)
+
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)

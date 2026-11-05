@@ -1,10 +1,10 @@
 package com.cornucopiacruise.ccl.feature.auth.presentation.register
 
 import app.cash.turbine.test
-import com.cornucopiacruise.ccl.feature.auth.domain.repository.FakeLoginRepository
-import com.cornucopiacruise.ccl.feature.auth.domain.repository.login.LoginError
-import com.cornucopiacruise.ccl.feature.auth.domain.repository.login.LoginRepository
-import com.cornucopiacruise.ccl.feature.auth.domain.repository.login.LoginResult
+import com.cornucopiacruise.ccl.feature.auth.domain.repository.AuthError
+import com.cornucopiacruise.ccl.feature.auth.domain.repository.AuthRepository
+import com.cornucopiacruise.ccl.feature.auth.domain.repository.AuthResult
+import com.cornucopiacruise.ccl.feature.auth.domain.repository.FakeAuthRepository
 import com.cornucopiacruise.ccl.feature.auth.presentation.login.LoginEffect
 import com.cornucopiacruise.ccl.feature.auth.presentation.login.LoginEvent
 import com.cornucopiacruise.ccl.feature.auth.presentation.login.LoginViewModel
@@ -36,7 +36,7 @@ class LoginViewModelTest {
     }
 
     private fun createViewModel(
-        repository: LoginRepository = FakeLoginRepository()
+        repository: AuthRepository = FakeAuthRepository()
     ) = LoginViewModel(repository)
 
     private fun LoginViewModel.fillValidForm(
@@ -104,7 +104,7 @@ class LoginViewModelTest {
 
     @Test
     fun `login click on empty form sets errors and does not call repository`() {
-        val repository = FakeLoginRepository()
+        val repository = FakeAuthRepository()
         val viewModel = createViewModel(repository)
 
         viewModel.onEvent(LoginEvent.LogInClick)
@@ -116,7 +116,7 @@ class LoginViewModelTest {
 
     @Test
     fun `simple password is accepted on login`() {
-        val repository = FakeLoginRepository()
+        val repository = FakeAuthRepository()
         val viewModel = createViewModel(repository).apply { fillValidForm() }
 
         viewModel.onEvent(LoginEvent.LogInClick)
@@ -126,7 +126,7 @@ class LoginViewModelTest {
 
     @Test
     fun `login trims email but keeps password as is`() {
-        val repository = FakeLoginRepository()
+        val repository = FakeAuthRepository()
         val viewModel = createViewModel(repository)
         val email = " test@example.com "
         val password = " password "
@@ -137,14 +137,14 @@ class LoginViewModelTest {
         viewModel.onEvent(LoginEvent.LogInClick)
 
         assertEquals(
-            listOf(FakeLoginRepository.LoginCall(email.trim(), password)),
+            listOf(FakeAuthRepository.LoginCall(email = email.trim(), password = password)),
             repository.loginCalls
         )
     }
 
     @Test
     fun `is loading while login in progress and false after`() {
-        val repository = FakeLoginRepository()
+        val repository = FakeAuthRepository()
         val gate = CompletableDeferred<Unit>()
         repository.loginGate = gate
         val viewModel = createViewModel(repository).apply { fillValidForm() }
@@ -158,7 +158,7 @@ class LoginViewModelTest {
 
     @Test
     fun `second click while loading does not call repository again`() {
-        val repository = FakeLoginRepository()
+        val repository = FakeAuthRepository()
         repository.loginGate = CompletableDeferred()
         val viewModel = createViewModel(repository).apply { fillValidForm() }
 
@@ -180,16 +180,16 @@ class LoginViewModelTest {
 
     @Test
     fun `failed login emits show error and stops loading`() = runTest {
-        LoginError.entries.forEach { error ->
-            val repository = FakeLoginRepository().apply {
-                loginResult = LoginResult.Failure(error)
+        AuthError.entries.forEach { error ->
+            val repository = FakeAuthRepository().apply {
+                loginResult = AuthResult.Failure(error)
             }
 
             val viewModel = createViewModel(repository).apply { fillValidForm() }
 
             viewModel.effects.test {
                 viewModel.onEvent(LoginEvent.LogInClick)
-                assertEquals(LoginEffect.ShowLoginError(error), awaitItem())
+                assertEquals(LoginEffect.ShowAuthError(error), awaitItem())
             }
 
             assertFalse(viewModel.state.value.isLoading)
