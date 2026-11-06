@@ -1,14 +1,15 @@
 package com.cornucopiacruise.ccl.feature.auth.presentation.register
 
 import app.cash.turbine.test
+import co.touchlab.kermit.Logger
 import com.cornucopiacruise.ccl.feature.auth.domain.repository.AuthError
 import com.cornucopiacruise.ccl.feature.auth.domain.repository.AuthRepository
 import com.cornucopiacruise.ccl.feature.auth.domain.repository.AuthResult
 import com.cornucopiacruise.ccl.feature.auth.domain.repository.FakeAuthRepository
 import com.cornucopiacruise.ccl.feature.auth.domain.usecase.RegisterUseCase
-import com.cornucopiacruise.ccl.feature.auth.domain.validator.EmailError
-import com.cornucopiacruise.ccl.feature.auth.domain.validator.FullNameError
-import com.cornucopiacruise.ccl.feature.auth.domain.validator.PasswordError
+import com.cornucopiacruise.ccl.core.domain.EmailError
+import com.cornucopiacruise.ccl.core.domain.FullNameError
+import com.cornucopiacruise.ccl.core.domain.PasswordError
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -39,7 +40,7 @@ class RegisterViewModelTest {
 
     private fun createViewModel(
         repository: AuthRepository = FakeAuthRepository()
-    ) = RegisterViewModel(RegisterUseCase(repository))
+    ) = RegisterViewModel(Logger, RegisterUseCase(repository))
 
     private fun RegisterViewModel.fillValidForm(
         newName: String = "John Doe",

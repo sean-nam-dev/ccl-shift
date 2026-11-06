@@ -2,6 +2,7 @@ package com.cornucopiacruise.ccl.feature.auth.presentation.login
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import co.touchlab.kermit.Logger
 import com.cornucopiacruise.ccl.feature.auth.domain.repository.AuthResult
 import com.cornucopiacruise.ccl.feature.auth.domain.usecase.LoginUseCase
 import kotlinx.coroutines.channels.Channel
@@ -13,8 +14,10 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 class LoginViewModel(
+    logger: Logger,
     private val loginUseCase: LoginUseCase
 ) : ViewModel() {
+    private val log = logger.withTag("LoginViewModel")
     private val _state = MutableStateFlow(LoginState())
     val state: StateFlow<LoginState> = _state.asStateFlow()
 
@@ -38,11 +41,20 @@ class LoginViewModel(
     }
 
     private fun login() {
-        if (_state.value.isLoading) return
+        log.d { "Login action received" }
+
+        if (_state.value.isLoading) {
+            log.d { "Loading" }
+            return
+        }
 
         _state.update { it.validated() }
-        if (_state.value.hasErrors) return
+        if (_state.value.hasErrors) {
+            log.d { "Login blocked by validation" }
+            return
+        }
 
+        log.i { "Loading started" }
         _state.update { it.copy(isLoading = true) }
         viewModelScope.launch {
             val result = loginUseCase(
@@ -53,8 +65,14 @@ class LoginViewModel(
             _state.update { it.copy(isLoading = false) }
 
             when (result) {
-                is AuthResult.Success -> _effects.trySend(LoginEffect.NavigateToHome)
-                is AuthResult.Failure -> _effects.trySend(LoginEffect.ShowAuthError(result.reason))
+                is AuthResult.Success -> {
+                    log.i { "Success" }
+                    _effects.trySend(LoginEffect.NavigateToHome)
+                }
+                is AuthResult.Failure -> {
+                    log.w { "Failed with ${result.reason}" }
+                    _effects.trySend(LoginEffect.ShowAuthError(result.reason))
+                }
             }
         }
     }

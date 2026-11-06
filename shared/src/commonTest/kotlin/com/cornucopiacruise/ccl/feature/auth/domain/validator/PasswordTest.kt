@@ -1,5 +1,7 @@
 package com.cornucopiacruise.ccl.feature.auth.domain.validator
 
+import com.cornucopiacruise.ccl.core.domain.PasswordError
+import com.cornucopiacruise.ccl.core.domain.validatePassword
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
@@ -36,7 +38,7 @@ class PasswordTest {
     fun `password with more than 30 characters returns TOO_LONG`() {
         assertEquals(
             PasswordError.TOO_LONG, validatePassword(
-            "a".repeat(10) + "1".repeat(10) + "#".repeat(11)
+                "a".repeat(10) + "1".repeat(10) + "#".repeat(11)
             )
         )
     }

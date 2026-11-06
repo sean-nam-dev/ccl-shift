@@ -1,6 +1,8 @@
 package com.cornucopiacruise.ccl.feature.auth.presentation.register
 
 import app.cash.turbine.test
+import co.touchlab.kermit.Logger
+import co.touchlab.kermit.loggerConfigInit
 import com.cornucopiacruise.ccl.feature.auth.domain.repository.AuthError
 import com.cornucopiacruise.ccl.feature.auth.domain.repository.AuthRepository
 import com.cornucopiacruise.ccl.feature.auth.domain.repository.AuthResult
@@ -39,7 +41,7 @@ class LoginViewModelTest {
 
     private fun createViewModel(
         repository: AuthRepository = FakeAuthRepository()
-    ) = LoginViewModel(LoginUseCase(repository))
+    ) = LoginViewModel(Logger, LoginUseCase(repository))
 
     private fun LoginViewModel.fillValidForm(
          email: String = "test@example.com",

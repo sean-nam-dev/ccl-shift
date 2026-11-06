@@ -1,7 +1,4 @@
-package com.cornucopiacruise.ccl.feature.auth.domain.validator
-
-import com.cornucopiacruise.ccl.core.domain.hasDigits
-import com.cornucopiacruise.ccl.core.domain.hasSpecialChars
+package com.cornucopiacruise.ccl.core.domain
 
 enum class FullNameError {
     IS_BLANK,

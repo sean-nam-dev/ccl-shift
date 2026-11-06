@@ -1,5 +1,7 @@
 package com.cornucopiacruise.ccl.feature.auth.domain.validator
 
+import com.cornucopiacruise.ccl.core.domain.EmailError
+import com.cornucopiacruise.ccl.core.domain.validateEmail
 import kotlin.test.Test
 import kotlin.test.assertEquals
 

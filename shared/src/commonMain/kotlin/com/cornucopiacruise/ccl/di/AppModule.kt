@@ -1,6 +1,6 @@
 package com.cornucopiacruise.ccl.di
 
-import com.cornucopiacruise.ccl.feature.auth.data.FirebaseAuthRepository
+import com.cornucopiacruise.ccl.feature.auth.data.AuthRepositoryImpl
 import com.cornucopiacruise.ccl.feature.auth.domain.repository.AuthRepository
 import com.cornucopiacruise.ccl.feature.auth.domain.usecase.LoginUseCase
 import com.cornucopiacruise.ccl.feature.auth.domain.usecase.RegisterUseCase
@@ -13,7 +13,7 @@ import org.koin.core.module.dsl.viewModelOf
 import org.koin.dsl.module
 
 val appModule = module {
-    single<AuthRepository> { FirebaseAuthRepository(Firebase.auth) }
+    single<AuthRepository> { AuthRepositoryImpl(Firebase.auth) }
 
     factoryOf(::RegisterUseCase)
     factoryOf(::LoginUseCase)
