@@ -5,6 +5,8 @@ import com.cornucopiacruise.ccl.feature.auth.domain.repository.AuthError
 import com.cornucopiacruise.ccl.feature.auth.domain.repository.AuthRepository
 import com.cornucopiacruise.ccl.feature.auth.domain.repository.AuthResult
 import com.cornucopiacruise.ccl.feature.auth.domain.repository.FakeAuthRepository
+import com.cornucopiacruise.ccl.feature.auth.domain.usecase.LoginUseCase
+import com.cornucopiacruise.ccl.feature.auth.domain.usecase.LoginUseCaseTest
 import com.cornucopiacruise.ccl.feature.auth.presentation.login.LoginEffect
 import com.cornucopiacruise.ccl.feature.auth.presentation.login.LoginEvent
 import com.cornucopiacruise.ccl.feature.auth.presentation.login.LoginViewModel
@@ -37,7 +39,7 @@ class LoginViewModelTest {
 
     private fun createViewModel(
         repository: AuthRepository = FakeAuthRepository()
-    ) = LoginViewModel(repository)
+    ) = LoginViewModel(LoginUseCase(repository))
 
     private fun LoginViewModel.fillValidForm(
          email: String = "test@example.com",

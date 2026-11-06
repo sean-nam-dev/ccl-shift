@@ -2,8 +2,8 @@ package com.cornucopiacruise.ccl.feature.auth.presentation.login
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.cornucopiacruise.ccl.feature.auth.domain.repository.AuthRepository
 import com.cornucopiacruise.ccl.feature.auth.domain.repository.AuthResult
+import com.cornucopiacruise.ccl.feature.auth.domain.usecase.LoginUseCase
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -13,7 +13,7 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 class LoginViewModel(
-    private val authRepository: AuthRepository
+    private val loginUseCase: LoginUseCase
 ) : ViewModel() {
     private val _state = MutableStateFlow(LoginState())
     val state: StateFlow<LoginState> = _state.asStateFlow()
@@ -45,7 +45,7 @@ class LoginViewModel(
 
         _state.update { it.copy(isLoading = true) }
         viewModelScope.launch {
-            val result = authRepository.login(
+            val result = loginUseCase(
                 email = _state.value.email,
                 password = _state.value.password
             )

@@ -5,6 +5,7 @@ import com.cornucopiacruise.ccl.feature.auth.domain.repository.AuthError
 import com.cornucopiacruise.ccl.feature.auth.domain.repository.AuthRepository
 import com.cornucopiacruise.ccl.feature.auth.domain.repository.AuthResult
 import com.cornucopiacruise.ccl.feature.auth.domain.repository.FakeAuthRepository
+import com.cornucopiacruise.ccl.feature.auth.domain.usecase.RegisterUseCase
 import com.cornucopiacruise.ccl.feature.auth.domain.validator.EmailError
 import com.cornucopiacruise.ccl.feature.auth.domain.validator.FullNameError
 import com.cornucopiacruise.ccl.feature.auth.domain.validator.PasswordError
@@ -38,7 +39,7 @@ class RegisterViewModelTest {
 
     private fun createViewModel(
         repository: AuthRepository = FakeAuthRepository()
-    ) = RegisterViewModel(repository)
+    ) = RegisterViewModel(RegisterUseCase(repository))
 
     private fun RegisterViewModel.fillValidForm(
         newName: String = "John Doe",
