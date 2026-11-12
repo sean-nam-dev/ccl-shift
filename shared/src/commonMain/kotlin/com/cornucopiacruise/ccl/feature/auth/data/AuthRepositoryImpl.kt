@@ -12,9 +12,10 @@ import dev.gitlive.firebase.auth.FirebaseAuthUserCollisionException
 import kotlinx.coroutines.CancellationException
 
 class AuthRepositoryImpl(
-    private val firebase: FirebaseAuth
+    private val firebase: FirebaseAuth,
+    logger: Logger
 ) : AuthRepository {
-    private val log = Logger.withTag("AuthRepositoryImpl")
+    private val log = logger.withTag("AuthRepositoryImpl")
 
     override suspend fun register(
         fullName: String,
@@ -25,7 +26,7 @@ class AuthRepositoryImpl(
         return try {
             log.d { "Create user started" }
             val result = firebase.createUserWithEmailAndPassword(email, password)
-            result.user?.updateProfile(displayName = fullName)
+            result.user?.updateProfile(displayName = fullName) ?: throw Exception()
             log.i { "Success" }
             AuthResult.Success
         } catch (e: CancellationException) {

@@ -1,4 +1,4 @@
-package com.cornucopiacruise.ccl.feature.main.navigation
+package com.cornucopiacruise.ccl.navigation
 
 import kotlinx.serialization.Serializable
 

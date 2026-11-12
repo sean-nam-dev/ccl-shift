@@ -7,7 +7,7 @@ import co.touchlab.kermit.platformLogWriter
 import com.cornucopiacruise.ccl.core.log.AppConfig
 import org.koin.dsl.module
 
-val loggingModule = module {
+val loggerModule = module {
     single<Logger> {
         val config = get<AppConfig>()
         Logger(

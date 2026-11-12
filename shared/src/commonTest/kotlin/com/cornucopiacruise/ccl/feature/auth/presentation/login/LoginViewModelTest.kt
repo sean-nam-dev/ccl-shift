@@ -1,17 +1,12 @@
-package com.cornucopiacruise.ccl.feature.auth.presentation.register
+package com.cornucopiacruise.ccl.feature.auth.presentation.login
 
 import app.cash.turbine.test
 import co.touchlab.kermit.Logger
-import co.touchlab.kermit.loggerConfigInit
 import com.cornucopiacruise.ccl.feature.auth.domain.repository.AuthError
 import com.cornucopiacruise.ccl.feature.auth.domain.repository.AuthRepository
 import com.cornucopiacruise.ccl.feature.auth.domain.repository.AuthResult
 import com.cornucopiacruise.ccl.feature.auth.domain.repository.FakeAuthRepository
 import com.cornucopiacruise.ccl.feature.auth.domain.usecase.LoginUseCase
-import com.cornucopiacruise.ccl.feature.auth.domain.usecase.LoginUseCaseTest
-import com.cornucopiacruise.ccl.feature.auth.presentation.login.LoginEffect
-import com.cornucopiacruise.ccl.feature.auth.presentation.login.LoginEvent
-import com.cornucopiacruise.ccl.feature.auth.presentation.login.LoginViewModel
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
